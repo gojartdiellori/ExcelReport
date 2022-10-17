@@ -2,7 +2,9 @@
 
 using Microsoft.Office.Interop.Excel;
 
-var persons=new List<Person>{
+
+// list of persons
+var persons = new List<Person>{
     new Person {
         ID = 1,
         Name = "John"
@@ -12,13 +14,22 @@ var persons=new List<Person>{
         Name="Susane"
     }
 };
-DisplayInExcel(persons);
 
 
-static void DisplayInExcel(IEnumerable<Person> persons)
+// Save Excel
+SaveInExcel(persons);
+
+
+// Garbage Collection will clean up process created by this program 
+GC.Collect();
+GC.WaitForPendingFinalizers();
+
+
+
+static void SaveInExcel(IEnumerable<Person> persons)
 {
     var excelApp = new Application();
-    excelApp.Visible = true;
+    excelApp.DisplayAlerts = false;
 
     Workbook workbook = excelApp.Workbooks.Add();
 
@@ -28,6 +39,7 @@ static void DisplayInExcel(IEnumerable<Person> persons)
     workSheet.Cells[1, "B"] = "Name";
 
     var row = 1;
+
     foreach (var person in persons)
     {
         row++;
@@ -35,6 +47,7 @@ static void DisplayInExcel(IEnumerable<Person> persons)
         workSheet.Cells[row, "B"] = person.Name;
     }
 
-    workbook.SaveAs(@"Test.xls");
-    
+    workbook.SaveAs(@"Test.xlsx");
+
+    excelApp.Quit();
 }
