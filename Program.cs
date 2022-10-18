@@ -1,5 +1,6 @@
 ﻿
 
+using System.Reflection;
 using Microsoft.Office.Interop.Excel;
 
 
@@ -35,8 +36,18 @@ static void SaveInExcel(IEnumerable<Person> persons)
 
     Worksheet workSheet = (Worksheet)workbook.Worksheets[1];
 
-    workSheet.Cells[1, "A"] = "ID Number";
-    workSheet.Cells[1, "B"] = "Name";
+    Type type = typeof(Person);
+    var iterator = 'A';
+    foreach (PropertyInfo prop in type.GetProperties())
+    {
+        workSheet.Cells[1, iterator.ToString()] = prop.Name;
+
+        iterator++;
+    }
+
+
+
+    // workSheet.Cells[1, "B"] = "Name";
 
     var row = 1;
 
@@ -47,7 +58,11 @@ static void SaveInExcel(IEnumerable<Person> persons)
         workSheet.Cells[row, "B"] = person.Name;
     }
 
-    workbook.SaveAs(@"Test.xlsx");
+
+    workSheet.Columns.AutoFit();
+
+    workbook.SaveAs(@"C:\Users\gojart\Projects\Test.xlsx");
+
 
     excelApp.Quit();
 }
