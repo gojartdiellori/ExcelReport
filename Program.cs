@@ -46,9 +46,6 @@ static void SaveInExcel(IEnumerable<Person> persons)
     }
 
 
-
-    // workSheet.Cells[1, "B"] = "Name";
-
     var row = 1;
 
     foreach (var person in persons)
@@ -58,10 +55,9 @@ static void SaveInExcel(IEnumerable<Person> persons)
         workSheet.Cells[row, "B"] = person.Name;
     }
 
-
     workSheet.Columns.AutoFit();
 
-    workbook.SaveAs(@"C:\Users\gojart\Projects\Test.xlsx");
+    workbook.SaveAs(@"Test.xlsx");
 
 
     excelApp.Quit();
